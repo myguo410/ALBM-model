@@ -1,0 +1,21 @@
+#!/bin/bash -l
+
+#SBATCH -n 1
+#SBATCH -t 10:00:00
+#SBATCH -A ebdl 
+#SBATCH --job-name=lake1
+#SBATCH -o job1.out
+#SBATCH --mail-type=END
+
+module unload netcdf4/4.5.0
+module unload impi/2017.1.132
+
+cd $SLURM_SUBMIT_DIR
+export NETCDF_HOME=/home/guo410/packages/Pnetcdf_openmpi_2.1.6
+export LD_LIBRARY_PATH=$NETCDF_HOME/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/guo410/anaconda3/lib:$LD_LIBRARY_PATH
+module load intel/17.0.1.132 openmpi/2.1.6
+
+export MV2_USE_SHMEM_COLL=0
+
+mpirun -np 1 ./ALBM namelist1.bLake
